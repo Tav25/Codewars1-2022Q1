@@ -2,12 +2,10 @@ function duplicateEncode(word) {
   word = word.toLowerCase();
   let result = word;
   Array.from(word).forEach((el) => {
-    // console.log(el)
-    let re = new RegExp("\\" + el, "g");
     if (word.indexOf(el) === word.lastIndexOf(el)) {
-      result = result.replace(re, "(");
+      result = result.replace(el, "(");
     }
-    result = result.replace(re, ")");
+    result = result.replace(el, ")");
   });
   // .join("");
   return result;
@@ -15,7 +13,7 @@ function duplicateEncode(word) {
 
 console.log(duplicateEncode(" ( ( )")); //,"(((");
 // console.log(duplicateEncode("dinD")); //,"(((");
-console.log(duplicateEncode("recede")); //,"()()()");
+// console.log(duplicateEncode("recede")); //,"()()()");
 // console.log(duplicateEncode("Success")); //,")())())","should ignore case");
 // console.log(duplicateEncode("(( @")); // "))(("
 
@@ -26,21 +24,21 @@ console.log(duplicateEncode("recede")); //,"()()()");
 // Supralapsarian
 
 // !!k)Snb!OT!!lv
-// // RRkRRRQHRRRR
+// RRkRRRQHRRRR
 
-// var newstr = "SupralapSarian".replace("S", "*");
-// console.log(newstr);
+var newstr = "SupralapSarian".replace("S", "*");
+console.log(newstr);
 
-// const str = "foo-bar-foo";
+const str = "foo-bar-foo";
 
-// // in older browsers
+// in older browsers
 
-// var re = new RegExp("foo", "g");
-// const result1 = str.replace(re, "moo");
+var re = new RegExp("foo", "g");
+const result1 = str.replace(re, "moo");
 
-// // ES12+
-// // const result2 = str.replaceAll('foo', 'moo');
+// ES12+
+// const result2 = str.replaceAll('foo', 'moo');
 
-// // output: 'moo-bar'
-// console.log(result1);
-// // console.log(result2);
+// output: 'moo-bar'
+console.log(result1);
+// console.log(result2);
