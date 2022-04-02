@@ -1,33 +1,57 @@
-function formatDuration(seconds) {
+function formatDuration(inSeconds) {
   let main = {
     years: 0,
     days: 0,
     hours: 0,
     minutes: 0,
-    currentSeconds: seconds,
+    seconds: inSeconds,
+    punctuation: {
+      minutes: ", ",
+      hours: ", ",
+      days: ", ",
+      years: ", ",
+      labelAnd: " and ",
+      labelZero: "",
+      func() {
+        if (main.minutes && main.seconds) {
+          this.minutes = this.labelAnd;
+        } else if (main.hours && (main.minutes || main.seconds)) {
+          this.minutes = this.labelZero;
+          this.hours = this.labelAnd;
+        } else if (main.days && (main.hours || main.minutes || main.seconds)) {
+          this.days = this.labelAnd;
+        } else if (
+          main.years &&
+          (main.days || main.hours || main.minutes || main.seconds)
+        ) {
+          this.years = this.labelAnd;
+        }
+        // console.log(">>>");
+      },
+    },
 
     isNow() {
-      if (currentSeconds === 0) this.final = "now";
+      if (seconds === 0) this.final = "now";
     },
 
     showLog() {
       console.log(
-        `Y:${this.years} D:${this.days} H:${this.hours} M:${this.minutes} S:${this.currentSeconds}`
+        `Y:${this.years} D:${this.days} H:${this.hours} M:${this.minutes} S:${this.seconds}`
       );
     },
 
     get final() {
-      return `${this.yearsOut} ${this.daysOut} ${this.hoursOut} ${this.minutesOut} ${this.secondsOut}`;
+      return `${this.yearsOut}${this.daysOut}${this.hoursOut}${this.minutesOut}${this.secondsOut}`;
     },
 
     get secondsOut() {
-      switch (this.currentSeconds) {
+      switch (this.seconds) {
         case 0:
           return ``;
         case 1:
           return `1 second`;
         default:
-          return `${this.currentSeconds} seconds`;
+          return `${this.seconds} seconds`;
       }
     },
 
@@ -36,9 +60,9 @@ function formatDuration(seconds) {
         case 0:
           return ``;
         case 1:
-          return `1 minute`;
+          return `1 minute${this.punctuation.minutes}`;
         default:
-          return `${this.minutes} minutes`;
+          return `${this.minutes} minutes${this.punctuation.minutes}`;
       }
     },
 
@@ -47,9 +71,9 @@ function formatDuration(seconds) {
         case 0:
           return ``;
         case 1:
-          return `1 hour`;
+          return `1 hour${this.punctuation.hours}`;
         default:
-          return `${this.hours} hours`;
+          return `${this.hours} hours${this.punctuation.hours}`;
       }
     },
 
@@ -58,9 +82,9 @@ function formatDuration(seconds) {
         case 0:
           return ``;
         case 1:
-          return `1 day`;
+          return `1 day${this.punctuation.days}`;
         default:
-          return `${this.days} days`;
+          return `${this.days} days${this.punctuation.days}`;
       }
     },
 
@@ -69,26 +93,27 @@ function formatDuration(seconds) {
         case 0:
           return ``;
         case 1:
-          return `1 year`;
+          return `1 year${this.punctuation.years}`;
         default:
-          return `${this.years} years`;
+          return `${this.years} years${this.punctuation.years}`;
       }
     },
 
     init() {
-      this.years = Math.floor(seconds / (365 * 24 * 60 * 60));
-      this.currentSeconds = this.currentSeconds % 31536000;
-      this.days = Math.floor(this.currentSeconds / (24 * 60 * 60));
-      this.currentSeconds = this.currentSeconds % (24 * 60 * 60);
-      this.hours = Math.floor(this.currentSeconds / (60 * 60));
-      this.currentSeconds = this.currentSeconds % (60 * 60);
-      this.minutes = Math.floor(this.currentSeconds / 60);
-      this.currentSeconds = this.currentSeconds % 60;
-      this.currentSeconds = this.currentSeconds;
+      this.years = Math.floor(inSeconds / (365 * 24 * 60 * 60));
+      this.seconds = this.seconds % 31536000;
+      this.days = Math.floor(this.seconds / (24 * 60 * 60));
+      this.seconds = this.seconds % (24 * 60 * 60);
+      this.hours = Math.floor(this.seconds / (60 * 60));
+      this.seconds = this.seconds % (60 * 60);
+      this.minutes = Math.floor(this.seconds / 60);
+      this.seconds = this.seconds % 60;
+      this.seconds = this.seconds;
     },
   };
   main.init();
-  main.showLog();
+  main.punctuation.func();
+  // main.showLog();
 
   // console.log(`Y:${years} D:${days} H:${hours} M:${minutes} S:${seconds}`);
 
