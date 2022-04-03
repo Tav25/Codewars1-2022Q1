@@ -5,30 +5,7 @@ function formatDuration(inSeconds) {
     hours: 0,
     minutes: 0,
     seconds: inSeconds,
-    punctuation: {
-      minutes: ", ",
-      hours: ", ",
-      days: ", ",
-      years: ", ",
-      labelAnd: " and ",
-      labelZero: "",
-      func() {
-        if (main.minutes && main.seconds) {
-          this.minutes = this.labelAnd;
-        } else if (main.hours && (main.minutes || main.seconds)) {
-          this.minutes = this.labelZero;
-          this.hours = this.labelAnd;
-        } else if (main.days && (main.hours || main.minutes || main.seconds)) {
-          this.days = this.labelAnd;
-        } else if (
-          main.years &&
-          (main.days || main.hours || main.minutes || main.seconds)
-        ) {
-          this.years = this.labelAnd;
-        }
-        // console.log(">>>");
-      },
-    },
+    array: [],
 
     isNow() {
       if (seconds === 0) this.final = "now";
@@ -41,7 +18,28 @@ function formatDuration(inSeconds) {
     },
 
     get final() {
-      return `${this.yearsOut}${this.daysOut}${this.hoursOut}${this.minutesOut}${this.secondsOut}`;
+      this.array = [
+        this.yearsOut,
+        this.daysOut,
+        this.hoursOut,
+        this.minutesOut,
+        this.secondsOut,
+      ];
+      let result = "";
+
+      return this.array
+        .filter((el, indx) => {
+          if (el) return el;
+        })
+        .reverse()
+        .map((el, indx) => {
+          if (indx === 1) el = el + " and";
+          if (indx > 1) el = el + ",";
+
+          return el;
+        })
+        .reverse()
+        .join(" ");
     },
 
     get secondsOut() {
@@ -60,9 +58,9 @@ function formatDuration(inSeconds) {
         case 0:
           return ``;
         case 1:
-          return `1 minute${this.punctuation.minutes}`;
+          return `1 minute`;
         default:
-          return `${this.minutes} minutes${this.punctuation.minutes}`;
+          return `${this.minutes} minutes`;
       }
     },
 
@@ -71,9 +69,9 @@ function formatDuration(inSeconds) {
         case 0:
           return ``;
         case 1:
-          return `1 hour${this.punctuation.hours}`;
+          return `1 hour`;
         default:
-          return `${this.hours} hours${this.punctuation.hours}`;
+          return `${this.hours} hours`;
       }
     },
 
@@ -82,9 +80,9 @@ function formatDuration(inSeconds) {
         case 0:
           return ``;
         case 1:
-          return `1 day${this.punctuation.days}`;
+          return `1 day`;
         default:
-          return `${this.days} days${this.punctuation.days}`;
+          return `${this.days} days`;
       }
     },
 
@@ -93,9 +91,9 @@ function formatDuration(inSeconds) {
         case 0:
           return ``;
         case 1:
-          return `1 year${this.punctuation.years}`;
+          return `1 year`;
         default:
-          return `${this.years} years${this.punctuation.years}`;
+          return `${this.years} years`;
       }
     },
 
@@ -112,17 +110,6 @@ function formatDuration(inSeconds) {
     },
   };
   main.init();
-  main.punctuation.func();
-  // main.showLog();
-
-  // console.log(`Y:${years} D:${days} H:${hours} M:${minutes} S:${seconds}`);
-
-  // let punctuations = ["and ", ", ", ", ", ", "];
-  // seconds = seconds ? `${seconds} seconds` : "";
-  // minutes = minutes ? `${minutes} minutes` : "";
-  // hours = hours ? `${hours} hours` : "";
-
-  // let result = `${hours} ${minutes} ${seconds}`;
   return main.final;
 }
 
