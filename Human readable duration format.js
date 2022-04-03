@@ -18,6 +18,8 @@ function formatDuration(inSeconds) {
     },
 
     get final() {
+      if (inSeconds === 0) return "now";
+
       this.array = [
         this.yearsOut,
         this.daysOut,
@@ -113,6 +115,7 @@ function formatDuration(inSeconds) {
   return main.final;
 }
 
+console.log(formatDuration(0)); //, "1 second");
 console.log(formatDuration(1)); //, "1 second");
 console.log(formatDuration(62)); //, "1 minute and 2 seconds");
 console.log(formatDuration(120)); //, "2 minutes");
@@ -120,3 +123,23 @@ console.log(formatDuration(3600)); //, "1 hour");
 console.log(formatDuration(3662)); //, "1 hour, 1 minute and 2 seconds");
 
 console.log(formatDuration(132030240)); //Expected: '4 years, 68 days, 3 hours and 4 minutes', instead got: undefined
+
+//!
+function formatDuration(seconds) {
+  var time = { year: 31536000, day: 86400, hour: 3600, minute: 60, second: 1 },
+    res = [];
+
+  if (seconds === 0) return "now";
+
+  for (var key in time) {
+    if (seconds >= time[key]) {
+      var val = Math.floor(seconds / time[key]);
+      res.push((val += val > 1 ? " " + key + "s" : " " + key));
+      seconds = seconds % time[key];
+    }
+  }
+
+  return res.length > 1
+    ? res.join(", ").replace(/,([^,]*)$/, " and" + "$1")
+    : res[0];
+}
