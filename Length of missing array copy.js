@@ -18,7 +18,7 @@ function getLengthOfMissingArray(arrayOfArrays) {
         summ = el.length + summ;
         if (el.length < min) min = el.length;
         if (el.length > max) max = el.length;
-      } 
+      }
     }
   });
   if (summ === 0 || summ === max) {
@@ -51,4 +51,32 @@ function getLengthOfMissingArray(arrayOfArrays) {
   // arrayOfArrays.every(isBigEnough)
 
   return exp;
+}
+
+//!
+function getLengthOfMissingArray(arr) {
+  return !arr ||
+    (ar = arr.map((x, i) => (x ? x.length : 0)).sort((a, b) => a - b)).indexOf(
+      0
+    ) > -1
+    ? 0
+    : ar.filter((x, i) => x != i + ar[0]).concat([1])[0] - 1;
+}
+
+function getLengthOfMissingArray(arrayOfArrays) {
+  const lengths = (arrayOfArrays || [])
+    .map((a) => (a ? a.length : 0))
+    .sort((a, b) => a - b);
+
+  if (lengths.includes(0)) {
+    return 0;
+  }
+
+  for (let i = 0; i < lengths.length - 1; i++) {
+    if (lengths[i] + 1 !== lengths[i + 1]) {
+      return lengths[i] + 1;
+    }
+  }
+
+  return 0;
 }
